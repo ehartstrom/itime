@@ -1,5 +1,6 @@
-import { Button } from "@mantine/core";
+import { Button, Container } from "@mantine/core";
 import { Link } from "@remix-run/react";
+
 
 import { useOptionalUser } from "~/utils";
 
@@ -7,7 +8,7 @@ export default function Index() {
   const user = useOptionalUser();
   return (
     
-              <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
+              <Container>
                 {user ? (
                   <Button component={Link}
                     to="/notes"
@@ -16,7 +17,7 @@ export default function Index() {
                     View Notes for {user.email}
                   </Button>
                 ) : (
-                  <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">
+                  <div >
                     <Button
                       component={Link}
                       to="/join"
@@ -33,6 +34,6 @@ export default function Index() {
                     </Button>
                   </div>
                 )}
-              </div>
+              </Container>
   );
 }
