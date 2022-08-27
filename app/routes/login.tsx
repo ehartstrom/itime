@@ -10,6 +10,7 @@ import * as React from "react";
 import { createUserSession, getUserId } from "~/session.server";
 import { verifyLogin } from "~/models/user.server";
 import { safeRedirect, validateEmail } from "~/utils";
+import { Center, Container } from "@mantine/core";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await getUserId(request);
@@ -30,6 +31,7 @@ export const action: ActionFunction = async ({ request }) => {
   const password = formData.get("password");
   const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
   const remember = formData.get("remember");
+  const utz = formData.get("utz")
 
   if (!validateEmail(email)) {
     return json<ActionData>(
@@ -61,11 +63,15 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
+  // const now = new Date()
+  // const utz = now.getTimezoneOffset()
+
   return createUserSession({
     request,
     userId: user.id,
     remember: remember === "on" ? true : false,
     redirectTo,
+    utz,
   });
 };
 
@@ -77,10 +83,11 @@ export const meta: MetaFunction = () => {
 
 export default function LoginPage() {
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") || "/notes";
+  const redirectTo = searchParams.get("redirectTo") || "/time/today";
   const actionData = useActionData() as ActionData;
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
+  const now = new Date()
 
   React.useEffect(() => {
     if (actionData?.errors?.email) {
@@ -91,9 +98,10 @@ export default function LoginPage() {
   }, [actionData]);
 
   return (
-    <div className="flex min-h-full flex-col justify-center">
-      <div className="mx-auto w-full max-w-md px-8">
+    <Container>
+      <Center>
         <Form method="post" className="space-y-6" noValidate>
+          <input type="hidden" name="utz" value={now.getTimezoneOffset()}/>
           <div>
             <label
               htmlFor="email"
@@ -184,7 +192,7 @@ export default function LoginPage() {
             </div>
           </div>
         </Form>
-      </div>
-    </div>
+      </Center>
+    </Container>
   );
 }

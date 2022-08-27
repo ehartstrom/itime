@@ -51,6 +51,7 @@
     "@remix-run/node": "*",
     "@remix-run/react": "*",
     "@remix-run/server-runtime": "*",
+    "@tabler/icons": "^1.79.0",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",
@@ -59,7 +60,9 @@
     "isbot": "^3.5.0",
     "morgan": "^1.10.0",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^18.2.0",
+    "remix-utils": "^3.3.0",
     "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {

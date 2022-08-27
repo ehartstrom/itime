@@ -2,18 +2,20 @@ import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
-import { requireUserId } from "~/session.server";
+import { getUserTZ, requireUserId } from "~/session.server";
 import { useUser } from "~/utils";
 import { getNoteListItems } from "~/models/note.server";
 
 type LoaderData = {
   noteListItems: Awaited<ReturnType<typeof getNoteListItems>>;
+  utz: string
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await requireUserId(request);
+  const utz = await getUserTZ(request)
   const noteListItems = await getNoteListItems({ userId });
-  return json<LoaderData>({ noteListItems });
+  return json<LoaderData>({ noteListItems, utz });
 };
 
 export default function NotesPage() {
@@ -27,6 +29,7 @@ export default function NotesPage() {
           <Link to=".">Notes</Link>
         </h1>
         <p>{user.email}</p>
+        <p>{data.utz}</p>
         <Form action="/logout" method="post">
           <button
             type="submit"

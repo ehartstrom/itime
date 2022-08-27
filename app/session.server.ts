@@ -18,6 +18,7 @@ export const sessionStorage = createCookieSessionStorage({
 });
 
 const USER_SESSION_KEY = "userId";
+const UTZ = 'PST'
 
 export async function getSession(request: Request) {
   const cookie = request.headers.get("Cookie");
@@ -30,6 +31,15 @@ export async function getUserId(
   const session = await getSession(request);
   const userId = session.get(USER_SESSION_KEY);
   return userId;
+}
+
+export async function getUserTZ(
+  request: Request
+)  {
+  const session = await getSession(request);
+  const timezone = session.get(UTZ);
+  return timezone;
+
 }
 
 export async function getUser(request: Request) {
@@ -68,14 +78,18 @@ export async function createUserSession({
   userId,
   remember,
   redirectTo,
+  utz,
 }: {
   request: Request;
   userId: string;
   remember: boolean;
   redirectTo: string;
+  utz: number
 }) {
+  //const utz = 'ABC'
   const session = await getSession(request);
   session.set(USER_SESSION_KEY, userId);
+  session.set(UTZ, utz)
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await sessionStorage.commitSession(session, {
