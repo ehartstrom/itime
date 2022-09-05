@@ -20,6 +20,18 @@ export default function Numbers () {
     const cols = 3
     const goal = 10
 
+    // attempt two - gen rand #s for one row, make second row based on first row and scramble colums
+    // determine how many right answers should be available - all rows or only one right answer?
+
+    const row1 = Array.from({
+        length: cols
+    }, () => getRandNum(min, max-min))
+
+    const row2 = row1.map((n) => max - n)
+
+
+    // attempt one
+
     const arr = Array.from({
         length: 10
     }, () => getRandNum(min, max))
@@ -78,6 +90,7 @@ export default function Numbers () {
 
         }
     }
+    // end sol 1
 
 
     //let solution = solutions.includes('true')
@@ -106,7 +119,12 @@ export default function Numbers () {
                     )
                 })
                 }
-
+                <Center>
+                    {row1.join(', ')}
+                </Center>
+                <Center>
+                    {row2.join(', ')}
+                </Center>
                 
                 
 

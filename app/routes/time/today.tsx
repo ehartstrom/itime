@@ -1,4 +1,4 @@
-import { Center, Container, Text, Timeline } from "@mantine/core";
+import { Box, Center, Container, Space, Stack, Text, Timeline } from "@mantine/core";
 import { createCookie, json, LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import {
@@ -9,6 +9,7 @@ import {
 } from "@tabler/icons";
 
 import  dayjs from 'dayjs'
+import { useMemo, useState } from "react";
 import TimeEntry from "~/components/timeentry";
 import { getUserTZ } from "~/session.server";
 
@@ -20,14 +21,106 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 
+const data2 = {
+  logs: [
+    {
+      id: 1,
+      start: dayjs().hour(8).minute(0).toISOString(),
+      end: dayjs().hour(9).toISOString(),
+      entry: 'a'
+    },
+    {
+      id: 2,
+      start: dayjs().hour(10).minute(5).toISOString(),
+      end: dayjs().hour(11).toISOString(),
+      entry: 'b'
+    },
+    {
+      id: 3,
+      start: dayjs().hour(12).minute(10).toISOString(),
+      end: dayjs().hour(13).toISOString(),
+      entry: 'b'
+    }
+  ],
+  entry: [
+    {
+      id: 'a',
+      matter: 'Project 1',
+      desc: 'workedy workedy'
+
+    },
+    {
+      id: 'b',
+      matter: 'Project 2',
+      desc: 'bleh'
+
+    }
+
+  ]
+}
+
 
 export default function TimePage() {
+  console.table(data2.logs)
+  // const logs = data2?.logs
+  // const entry = data2?.entry
+
+  const [logs, setLogs] = useState(data2.logs)
+  const [entry, setEntry] = useState(data2.entry)
+  const [list, setList] = useState(
+    logs.map(l =>  {
+      const e = entry.find(v => v.id === l.entry)
+      return {...l, entry: e}
+    })
+  )
+
+
+
+  function updateList (update) {
+    const newList = logs.map(l =>  {
+      const e = entry.find(v => v.id === l.entry)
+      if (e?.id == update.id) {
+      return {...l, entry: update}}
+      else {
+        return {...l, entry: e}
+      }
+     })
+    setList( newList )
+  }
+
+  function ListDisplay () {
+    return (
+      <>
+    {list.map(l =>  {
+      // const e = entry.find(v => v.id === l.entry)
+      // const data = {...l, entry: e}
+      
+      return (
+      <Center key={l.id}>
+      <TimeEntry  log={l} entry={l.entry} updateEntry={updateList}/> 
+      </Center>
+      )
+    }  )}
+    </>
+    )
+  }
+
   
+
+  
+
   return (
     <Container>
-      <Center>
-        <TimeEntry />
-      </Center>
+      
+        
+        {<ListDisplay/>}
+        
+        
+        
+        {JSON.stringify(entry)}
+       
+      
+      
     </Container>
   );
 }
