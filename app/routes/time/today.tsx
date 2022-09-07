@@ -61,7 +61,7 @@ const data2 = {
 
 
 export default function TimePage() {
-  console.table(data2.logs)
+  //console.table(data2.logs)
   // const logs = data2?.logs
   // const entry = data2?.entry
 
@@ -74,15 +74,29 @@ export default function TimePage() {
     })
   )
 
+  function updateLog (update) {
+    
+    const newList = list.map(l =>  {
+      const e = l.entry//entry?.find(v => v.matter === l.entry?.id)
+      if (l.id == update.id) {
+      return {...update, entry: e}}
+      else {
+        return l//{...l, entry: e}
+      }
+     })
+    setList( newList )
+  }
 
 
   function updateList (update) {
-    const newList = logs.map(l =>  {
-      const e = entry.find(v => v.id === l.entry)
-      if (e?.id == update.id) {
+    //console.log('update')
+    //console.table(list)
+    const newList = list.map(l =>  {
+      //const e = entry?.find(v => v.matter === l.entry?.id)
+      if (l.entry?.id == update.id) {
       return {...l, entry: update}}
       else {
-        return {...l, entry: e}
+        return l//{...l, entry: e}
       }
      })
     setList( newList )
@@ -97,7 +111,7 @@ export default function TimePage() {
       
       return (
       <Center key={l.id}>
-      <TimeEntry  log={l} entry={l.entry} updateEntry={updateList}/> 
+      <TimeEntry  log={l} entry={l.entry} updateEntry={updateList} updateLog={updateLog}/> 
       </Center>
       )
     }  )}

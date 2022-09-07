@@ -4,6 +4,10 @@ import {
   Global,
   MantineProvider,
 } from "@mantine/core";
+
+import { createEmotionCache } from "@mantine/core";
+import { StylesPlaceholder } from "@mantine/remix";
+
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
@@ -17,6 +21,10 @@ import {
 import { useState } from "react";
 
 import { getUser } from "./session.server";
+
+import { theme } from './theme';
+
+createEmotionCache({ key: "mantine" });
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -35,43 +43,64 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function App() {
-  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
-  const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
-
   return (
-    <html lang="en">
-      <head>
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <ColorSchemeProvider
-          colorScheme={colorScheme}
-          toggleColorScheme={toggleColorScheme}
-        >
-          <MantineProvider
-            withNormalizeCSS
-            withGlobalStyles
-            theme={{ colorScheme }}
-          >
-            <GlobalStyles />
-            <Outlet />
-          </MantineProvider>
-        </ColorSchemeProvider>
-
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
-    </html>
+    <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
+      <html lang="en">
+        <head>
+          <StylesPlaceholder />
+          <Meta />
+          <Links />
+        </head>
+        <body>
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </body>
+      </html>
+    </MantineProvider>
   );
 }
 
-const GlobalStyles = () => (
-  <Global
-    styles={{
-      "html, body": { height: "100%", margin: 0 },
-    }}
-  />
-);
+// export default function App() {
+//   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
+//   const toggleColorScheme = (value?: ColorScheme) =>
+//     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
+//   return (
+//     <ColorSchemeProvider
+//       colorScheme={colorScheme}
+//       toggleColorScheme={toggleColorScheme}
+//     >
+//       <MantineProvider
+//         withNormalizeCSS
+//         withGlobalStyles
+//         theme={{ colorScheme }}
+//       >
+//         <html lang="en">
+//           <head>
+//             <StylesPlaceholder />
+//             <Meta />
+//             <Links />
+//           </head>
+//           <body>
+//             <GlobalStyles />
+//             <Outlet />
+
+//             <ScrollRestoration />
+//             <Scripts />
+//             <LiveReload />
+//           </body>
+//         </html>
+//       </MantineProvider>
+//     </ColorSchemeProvider>
+//   );
+// }
+
+// const GlobalStyles = () => (
+//   <Global
+//     styles={{
+//       "html, body": { height: "100%", margin: 0 },
+//     }}
+//   />
+// );

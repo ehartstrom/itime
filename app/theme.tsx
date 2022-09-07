@@ -101,3 +101,7 @@ interface MantineTheme {
     fontWeight: CSSProperties['fontWeight'];
     lineHeight: CSSProperties['lineHeight'];
   }
+
+  const theme = {}
+
+  export {theme}
