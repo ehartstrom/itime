@@ -89,8 +89,9 @@ export default function TimePage() {
 
 
   function updateList (update) {
-    //console.log('update')
-    //console.table(list)
+    // console.log('update')
+    // console.table(list)
+    // console.log(update)
     const newList = list.map(l =>  {
       //const e = entry?.find(v => v.matter === l.entry?.id)
       if (l.entry?.id == update.id) {
@@ -111,7 +112,7 @@ export default function TimePage() {
       
       return (
       <Center key={l.id}>
-      <TimeEntry  log={l} entry={l.entry} updateEntry={updateList} updateLog={updateLog}/> 
+      <TimeEntry  log={l} entry={l.entry} updateEntry={updateList} updateLog={updateLog} matters={data2.entry}/> 
       </Center>
       )
     }  )}
@@ -130,7 +131,7 @@ export default function TimePage() {
         {<ListDisplay/>}
         
         
-        
+        <TimeEntry updateEntry={updateList} updateLog={updateLog} matters={data2.entry}/>
         {JSON.stringify(entry)}
        
       
